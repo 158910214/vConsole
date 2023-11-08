@@ -1,42 +1,40 @@
-const Path = require('path');
-const fs = require('fs');
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const baseConfig = require('./webpack.config.js');
+const Path = require("path");
+const fs = require("fs");
+const webpack = require("webpack");
+const { merge } = require("webpack-merge");
+const baseConfig = require("./webpack.config.js");
 
-const contentBase = Path.join(__dirname, '/');
+const contentBase = Path.join(__dirname, "/");
 
 module.exports = (env, argv) => {
   return merge(baseConfig(env, argv), {
-    mode: 'development',
+    mode: "development",
     // devtool: 'eval-source-map',
     devtool: false,
     devServer: {
-      host: '0.0.0.0',
+      host: "0.0.0.0",
       port: 9191,
-      open: 'dev/index.html',
-      allowedHosts: 'all',
+      open: contentBase + "dev/index.html",
+      allowedHosts: "all",
       historyApiFallback: true,
       client: {
         overlay: true,
       },
-      static: [
-        { directory: contentBase, },
-      ],
+      static: [{ directory: contentBase }],
       onBeforeSetupMiddleware(devServer) {
-        devServer.app.all('*', (req, res) => {
+        devServer.app.all("*", (req, res) => {
           const contentType = {
-            'flv': 'video/x-flv',
-            'wav': 'audio/x-wav',
+            flv: "video/x-flv",
+            wav: "audio/x-wav",
           };
-          const fileType = req.path.split('.').pop();
+          const fileType = req.path.split(".").pop();
           // console.log('Req:::', fileType, req.path, req.query);
-          if (fileType === 'flv') {
+          if (fileType === "flv") {
             res.set({
-              'Content-Type': contentType[fileType],
+              "Content-Type": contentType[fileType],
               // 'Content-Type', 'application/octet-stream',
-              'Transfer-Encoding': 'chunked',
-              'Connection': 'keep-alive',
+              "Transfer-Encoding": "chunked",
+              Connection: "keep-alive",
             });
             let n = 0;
             const write = () => {
@@ -52,7 +50,6 @@ module.exports = (env, argv) => {
               }, 100);
             };
             write();
-
           } else {
             const delay = req.query.t || Math.ceil(Math.random() * 100);
             setTimeout(() => {
@@ -63,8 +60,8 @@ module.exports = (env, argv) => {
                 res.status(req.query.s || 200);
                 if (req.query.chunked) {
                   res.set({
-                    'Transfer-Encoding': 'chunked',
-                    'Connection': 'keep-alive',
+                    "Transfer-Encoding": "chunked",
+                    Connection: "keep-alive",
                   });
                   res.write(fs.readFileSync(filePath));
                 } else {
@@ -79,13 +76,11 @@ module.exports = (env, argv) => {
             }, delay);
           }
         });
-      }
+      },
     },
     optimization: {
       minimize: false,
     },
-    plugins: [
-      new webpack.HotModuleReplacementPlugin()
-    ]
+    plugins: [new webpack.HotModuleReplacementPlugin()],
   });
 };

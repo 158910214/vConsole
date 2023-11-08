@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-  import * as tool from '../lib/tool';
-  import Style from './switchButton.less';
+  import { onMount, onDestroy } from "svelte";
+  import * as tool from "../lib/tool";
+  import Style from "./switchButton.less";
+  import Img from "./img/cmsui-logo.png";
 
   /*************************************
    * Public properties
@@ -9,7 +10,6 @@
 
   export let show = true;
   export let position = { x: 0, y: 0 };
-
 
   /*************************************
    * Inner properties
@@ -22,7 +22,7 @@
     startX: 0,
     startY: 0,
     endX: 0,
-    endY: 0
+    endY: 0,
   };
   const btnSwitchPos = {
     x: 0,
@@ -36,7 +36,6 @@
     }
   }
 
-
   /*************************************
    * Lifecycle
    *************************************/
@@ -49,7 +48,6 @@
     Style.unuse();
   });
 
-
   /*************************************
    * Methods
    *************************************/
@@ -60,16 +58,22 @@
     switchPos.y = switchY;
     btnSwitchPos.x = switchX;
     btnSwitchPos.y = switchY;
-    tool.setStorage('switch_x', switchX + '');
-    tool.setStorage('switch_y', switchY + '');
-  }
+    tool.setStorage("switch_x", switchX + "");
+    tool.setStorage("switch_y", switchY + "");
+  };
 
   /**
-  * Get an safe [x, y] position for switch button
-  */
+   * Get an safe [x, y] position for switch button
+   */
   const _getSwitchButtonSafeAreaXY = (x: number, y: number) => {
-    const docWidth = Math.max(document.documentElement.offsetWidth, window.innerWidth);
-    const docHeight = Math.max(document.documentElement.offsetHeight, window.innerHeight);
+    const docWidth = Math.max(
+      document.documentElement.offsetWidth,
+      window.innerWidth
+    );
+    const docHeight = Math.max(
+      document.documentElement.offsetHeight,
+      window.innerHeight
+    );
     // check edge
     if (x + btnSwitch.offsetWidth > docWidth) {
       x = docWidth - btnSwitch.offsetWidth;
@@ -77,12 +81,15 @@
     if (y + btnSwitch.offsetHeight > docHeight) {
       y = docHeight - btnSwitch.offsetHeight;
     }
-    if (x < 0) { x = 0; }
-    if (y < 20) { y = 20; } // safe area for iOS Home indicator
+    if (x < 0) {
+      x = 0;
+    }
+    if (y < 20) {
+      y = 20;
+    } // safe area for iOS Home indicator
     return [x, y];
   };
 
-  
   /*************************************
    * DOM Events
    *************************************/
@@ -106,9 +113,9 @@
       return;
     }
     const offsetX = e.touches[0].pageX - switchPos.startX,
-          offsetY = e.touches[0].pageY - switchPos.startY;
+      offsetY = e.touches[0].pageY - switchPos.startY;
     let x = Math.floor(switchPos.x - offsetX),
-        y = Math.floor(switchPos.y - offsetY);
+      y = Math.floor(switchPos.y - offsetY);
     [x, y] = _getSwitchButtonSafeAreaXY(x, y);
     btnSwitchPos.x = x;
     btnSwitchPos.y = y;
@@ -121,10 +128,14 @@
 
 <div
   class="vc-switch"
-  style="right: {btnSwitchPos.x}px; bottom: {btnSwitchPos.y}px; display: {show ? 'block' : 'none'};"
+  style="
+    right: {btnSwitchPos.x}px; 
+    bottom: {btnSwitchPos.y}px; 
+    background-image: url({Img});
+    display: {show ? 'block' : 'none'};"
   bind:this={btnSwitch}
   on:touchstart|nonpassive={onTouchStart}
   on:touchend|nonpassive={onTouchEnd}
   on:touchmove|nonpassive={onTouchMove}
   on:click
->vConsole</div>
+/>
