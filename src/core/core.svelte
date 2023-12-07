@@ -321,6 +321,7 @@
 
 <div
   id="__vconsole"
+  data-ignore
   class:vc-toggle={showMain}
   style="{fontSize ? 'font-size:' + fontSize + ';' : ''}"
   data-theme={theme}

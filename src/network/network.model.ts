@@ -37,7 +37,7 @@ export class VConsoleNetworkModel extends VConsoleModel {
       window.fetch = FetchProxy.origFetch;
     }
     if (BeaconProxy.hasSendBeacon()) {
-      window.navigator.sendBeacon = BeaconProxy.origSendBeacon;
+      // window.navigator.sendBeacon = BeaconProxy.origSendBeacon;
     }
   }
 
@@ -108,9 +108,9 @@ export class VConsoleNetworkModel extends VConsoleModel {
     if (!BeaconProxy.hasSendBeacon()) {
       return;
     }
-    window.navigator.sendBeacon = BeaconProxy.create((item: VConsoleNetworkRequestItem) => {
-      this.updateRequest(item.id, item);
-    });
+    // window.navigator.sendBeacon = BeaconProxy.create((item: VConsoleNetworkRequestItem) => {
+    //   this.updateRequest(item.id, item);
+    // });
   }
 
   protected limitListLength() {

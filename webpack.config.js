@@ -3,6 +3,7 @@ const Path = require("path");
 const { execSync } = require("child_process");
 const TerserPlugin = require("terser-webpack-plugin");
 const sveltePreprocess = require("svelte-preprocess");
+const webpackDevServer = require("webpack-dev-server");
 const pkg = require("./package.json");
 const BuildTarget = ["web", "wx"];
 
@@ -156,5 +157,13 @@ module.exports = (env, argv) => {
       ignored: ["**/node_modules"],
     },
     plugins,
+    devServer: {
+      hot: true,
+      port: 3000,
+      static: {
+        directory: Path.resolve(__dirname, "dev"), // 这里指定服务器的根目录
+      },
+      // contentBase: Path.join(__dirname, "./dev"),
+    },
   };
 };

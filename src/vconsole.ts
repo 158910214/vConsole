@@ -14,11 +14,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
  */
 
 // polyfill
-import 'core-js/stable/symbol';
-import 'core-js/stable/promise';
+import "core-js/stable/symbol";
+import "core-js/stable/promise";
 
 // vConsole Core Class
-import { VConsole } from './core/core';
+import { VConsole } from "./core/core";
 
 // export
+new VConsole()
 export default VConsole;
